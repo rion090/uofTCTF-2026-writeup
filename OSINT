@@ -1,1 +1,24 @@
+Go Go Coaster!   12:26pm 10th Jan 2026
+349 users 38 points
+Go Go Coaster!
+37 points
+365 solves
+Description
+During an episode of Go Go Squid!, Han Shangyan was too scared to go on a roller coaster. What's the English name of this roller coaster? Also, what's its height in whole feet?
+
+Flag format: uoftctf{Coaster_Name_HEIGHT}
+
+Example: uoftctf{Yukon_Striker_999}
+
+Notes:
+
+Flag is case-insenstive, just remember to replace spaces with underscores and no decimal points
+Author: levu12
+
+
+basic : First I gave a direct search in google and got Black Hole 2000 with height 114 feet but that was not the answer..changed tactics and thought  maybe the roller coaster was shown somewhere in the drama so I searched up the episode and 
+gave a quick scroll through in yt...no scene of any roller coaster so I had to think differently this time, instead of searching for it directly in the drama, I started searching for the drama's filming
+locations. The drama was filmed partly in Shanghai Happy Valley amusement park. The roller coaster in question is Diving Coaster, which is the English name of the ride. Another quick Google search gave
+out the height and got the final flag : uoftctf{Diving_Coaster_213}
+
 
