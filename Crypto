@@ -1,1 +1,105 @@
+Tried 2 crypto challenges...well 1 crypto and 1 misc
+going ahead with the crypto, challenge name is leaked d, its a RSA case from initial standpoint however it its a double layered challenge which
+means rsa was not the only encryption does. All though I did manage to recover some values using automated scripts from AI, but I soon discovered that
+it is a probable AES, ChaCha etc with hidden symmetric keys. I am unable to decrypt from this point onwards. I had also checked for stuff like hex followed by gzip/zlib, and XOR 
+with 1 byte key and got the same gibberish msg.
 
+
+My latest code figuring out the parts I just explained:
+import math
+n=144193923737869044259998596038292537217126517072587407189785154961344425600188709243733103713567903690926695626210849582322575275021963176688615503362430255878068025864333805901831356111202249176714839010151878345993886718863579928588098080351940561045688931786378656665718140998014299097023143181095121810219
+d=6816497118529103570519829810655914548741639152758598502286533221556877666594569865091651964105506975525991949550924964380513900497427998395388450552698026537831641533867678676700716452335069753712240625942495367186982890021832849065384970898677671887
+c=31703515320997441500407462163885912085193988887521686491271883832485018463764003313655377418478488372329742364292629844576532415828605994734718987367062694340608380583593689052813716395874850039382743513756381017287371000882358341440383454299152364807346068866304481227367259672607408256375720022838698292966
+m=pow(c,d,n)
+print("m=",m)
+msg=m.to_bytes((m.bit_length()+7)//8,'big')
+print("Output=",msg)
+msg_le = m.to_bytes((m.bit_length() + 7)//8, 'little')
+print("Output2=",msg_le)
+import zlib
+try:
+    print("zlib=",zlib.decompress(msg))
+except:
+    print("did not work")
+import gzip
+try:
+    print("gzip=",gzip.decompress(msg))
+except:
+    print("did not work")
+
+for k in range(256):
+    x = bytes(b ^ k for b in msg)
+    if b"uoftctf" in x or b"{" in x:
+        print("Here goes nothing:\n",k, x)
+
+
+for the code I used to derive d2 and phi(n), check the conversation in microsoft copilot...tbh I kind of understand the RSA logic since it was also
+taught in class last week but our teacher did not use a few terms from online explanations so I was still a little air headed but yeah
+
+
+
+
+
+---misc challenge: guess the number---
+ok idk where on earth I went wrong but see I did what I could...this one gave a zip file containing the chall.py, the main script to run to enter
+the challenge, a "fake" flag.txt, which also has the real flag hidden and a dockerfile, first things first, I obviously have a problem with docker thanks to old ah pc
+so idk if I had to use it (probably had to) but still just jumped into it nevertheless, I used ai to analyze the source code given and found that the condition is as follows:
+
+the output prompts you to enter any number or args expression 50 times and this secret number is ranged from 2^1 to 2^99
+you put in a expression, and if it returns an yes! then your guessed number is < than x and if it is no then your guess no. is >= x.
+based on this logic I kept on narrowing down the range starting from the back...got it under 2^98 and 2^99..kept doing midpoints from here and feeding the expression
+to the code...changed the upper and lower bounds to find the midpoint based on the yes! or no! that i was getting. I actually did tightten it up to a certain number though
+
+after 50 attempts, the code asks you to guess the number, if you get it correct it give sthe flag but if you dont, it says to try again,
+I even though that if I changed the source code provided and ran it maybe I would get the code, very very noob player mistake...it just shows the fake flag
+but hey, desperation?
+....I have all the source codes for the challenges in both my terminal and windows so refer to that for the cleaner writeup...
+
+
+
+
+
+
+//////////  CHALLENGE DESCRIPTIONS FROM THE CTF   //////////
+
+Guess The Number
+46 points
+196 solves
+Description
+Guess my super secret number
+
+nc 35.231.13.90 5000
+
+Author: White
+
+Files
+
+
+
+
+
+
+
+
+
+
+
+
+
+Leaked d
+33 points
+751 solves
+Description
+Someone leaked my d, surely generating a new key pair is safe enough.
+
+n1=144193923737869044259998596038292537217126517072587407189785154961344425600188709243733103713567903690926695626210849582322575275021963176688615503362430255878068025864333805901831356111202249176714839010151878345993886718863579928588098080351940561045688931786378656665718140998014299097023143181095121810219
+
+e1=65537
+
+d1=12574092103116126584156918631595005114605155027996964036950457918490065036621732354668884564796078087090438462300608898225025828108557296714458055780952572974382089675780912070693778415852291145766476219909978391880801604060224785419022793121117332853938170749724540897211958251465747669952580590146500249193
+
+e2=6767671
+
+c=31703515320997441500407462163885912085193988887521686491271883832485018463764003313655377418478488372329742364292629844576532415828605994734718987367062694340608380583593689052813716395874850039382743513756381017287371000882358341440383454299152364807346068866304481227367259672607408256375720022838698292966
+
+Author: janky
